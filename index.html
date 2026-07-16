@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SPIKE-03 · 3D Runtime Engine Harness</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #1a1a1a; font-family: system-ui, sans-serif; }
+      #app { position: relative; width: 100vw; height: 100vh; }
+      #scene-canvas { position: absolute; inset: 0; display: block; }
+      #panel {
+        position: absolute; top: 0; left: 0; z-index: 10; max-width: 320px;
+        padding: 12px; background: rgba(20,20,20,0.75); color: #eee; font-size: 13px;
+      }
+      #panel h1 { font-size: 14px; margin: 0 0 8px; }
+      #panel button { display: block; width: 100%; margin: 4px 0; padding: 6px 8px; cursor: pointer; }
+      #panel .status { margin-top: 8px; white-space: pre-wrap; font-family: monospace; font-size: 11px; color: #9f9; }
+      #fallback {
+        position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+        flex-direction: column; background: #1a1a1a; color: #eee;
+      }
+      #fallback img { max-width: 60vw; max-height: 60vh; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="scene-canvas"></canvas>
+      <div id="panel"></div>
+      <div id="fallback"></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

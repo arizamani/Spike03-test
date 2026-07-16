@@ -6,6 +6,7 @@ handoff/
 node_modules/
 dist/
 .vite/
+.claude/
 *.glb
 *.webp
 *.png
