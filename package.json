@@ -1,0 +1,19 @@
+{
+  "name": "configurator-spike-03",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "description": "SPIKE-03 3D runtime engine harness (throwaway, disposable). Consumes SPIKE-04 manifest shape + SPIKE-05 evaluator-output shape via fixtures/. No cross-imports.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "gen:glb": "node fixtures/generate-glb.mjs"
+  },
+  "dependencies": {
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vite": "^5.4.0"
+  }
+}

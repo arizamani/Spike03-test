@@ -1,0 +1,54 @@
+{
+  "_note": "SPIKE-03 payload-slice fixture. This is the RUNTIME-PAYLOAD side of the seam (SPIKE-05 / 18.3 domain), NOT the asset manifest. It carries what the renderer needs that the manifest does NOT: (1) visual_nodes = the node->asset->material map (18.3 §7.5); (2) assembly_relationships (18.3 §7.8); (3) anchors (18.3 §7.9, Builder-authored) + placement_presets (18.3 §7.10) that supply the placement GEOMETRY. Node ids (node-shell/node-base/node-seat-cover) and asset/material ids match SPIKE-05's chair fixture so resolved-state.samples.json references resolve. Coordinates: fractional bounding-box relative_position per 18.3 §7.9 — the held AD-006 §20.3 scaled-integer encoding (F1) is deliberately NOT depended on (same posture SPIKE-05 took). Do NOT import SPIKE-05 code — copy the shape only (isolated-spike rule).",
+
+  "published": { "published_configurator_id": "conf-spike03", "published_version_id": "pub-spike03-v1" },
+
+  "visual_nodes": [
+    { "visual_node_id": "node-shell",      "default_asset_id": "asset-shell-01",         "default_material_id": "mat-amber" },
+    { "visual_node_id": "node-base",       "default_asset_id": "asset-base-nylon-finish", "default_material_id": "mat-nylon" },
+    { "visual_node_id": "node-seat-cover", "default_asset_id": "asset-seat-cover-01",     "default_material_id": "mat-slate" },
+    { "visual_node_id": "node-headrest",   "default_asset_id": "asset-headrest-01",       "default_material_id": "mat-slate" }
+  ],
+
+  "materials": [
+    { "material_id": "mat-amber", "base_color": "#c8811e", "roughness": 0.6, "metalness": 0.0 },
+    { "material_id": "mat-nylon", "base_color": "#2b2b2b", "roughness": 0.9, "metalness": 0.0 },
+    { "material_id": "mat-slate", "base_color": "#556070", "roughness": 0.7, "metalness": 0.1 }
+  ],
+
+  "assembly_relationships": [
+    {
+      "assembly_relation_id": "asm-headrest-on-shell",
+      "parent_visual_node_id": "node-shell",
+      "child_visual_node_id": "node-headrest",
+      "relationship_type": "attached",
+      "anchor_id": "anc-shell-top-headrest",
+      "placement_preset_id": "place-headrest-default",
+      "required": false,
+      "customer_controls": { "can_move": false, "can_rotate": false, "can_remove": true }
+    }
+  ],
+
+  "anchors": [
+    {
+      "anchor_id": "anc-shell-top-headrest",
+      "scope": "instance_override",
+      "visual_node_id": "node-shell",
+      "declared_side": "top",
+      "relative_position": [0.5, 1.0, 0.5],
+      "relative_rotation": [0, 0, 0],
+      "snap": true,
+      "movement_lock": true
+    }
+  ],
+
+  "placement_presets": [
+    {
+      "placement_preset_id": "place-headrest-default",
+      "label": "Headrest — top-centre default",
+      "relative_position": [0.5, 1.0, 0.5],
+      "relative_rotation": [0, 0, 0],
+      "allowed_parent_types": ["chair"]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "_note": "SPIKE-03 loader fixture. SHAPE IS COPIED VERBATIM FROM SPIKE-04's produced manifest (report/manifest.sample.json): manifest_version, workspace_id, generated_at, assets[]{asset_id, asset_version, role, url, fallback_image_url, validation_status, mount}. mount is ASSET-LEVEL ONLY per AD-007a §12 / SPIKE-04 F-A: orientation + declaredSides + assetTypeKey. NO authored anchors here — anchors/placement live in the runtime PAYLOAD (see payload-slice.sample.json), not on the asset. URLs use the ${CLOUDFRONT_DOMAIN} template exactly as SPIKE-04 emits; the loader substitutes LOCAL_ASSET_BASE_URL locally. Extended from SPIKE-04's single triangle to a multi-part chair assembly so A1/A3 have real parts. This file is a fixture — do NOT import SPIKE-04 code (isolated-spike rule).",
+  "manifest_version": "2026-07-12T00-00-01Z",
+  "workspace_id": "ws-spike03-a",
+  "generated_at": "2026-07-12T10:00:00.000Z",
+  "assets": [
+    {
+      "asset_id": "asset-shell-01",
+      "asset_version": "v1",
+      "role": "primary",
+      "url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/assets/asset-shell-01/versions/v1/model.glb",
+      "fallback_image_url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/previews/asset-shell-01/versions/v1/preview.webp",
+      "validation_status": "passed",
+      "mount": { "orientation": { "confirmed": true }, "declaredSides": ["top", "bottom", "front", "back"], "assetTypeKey": "chair" }
+    },
+    {
+      "asset_id": "asset-base-nylon-finish",
+      "asset_version": "v1",
+      "role": "primary",
+      "url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/assets/asset-base-nylon-finish/versions/v1/model.glb",
+      "fallback_image_url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/previews/asset-base-nylon-finish/versions/v1/preview.webp",
+      "validation_status": "passed",
+      "mount": { "orientation": { "confirmed": true }, "declaredSides": ["top"], "assetTypeKey": "chair-base" }
+    },
+    {
+      "asset_id": "asset-base-alloy-finish",
+      "asset_version": "v1",
+      "role": "primary",
+      "url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/assets/asset-base-alloy-finish/versions/v1/model.glb",
+      "fallback_image_url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/previews/asset-base-alloy-finish/versions/v1/preview.webp",
+      "validation_status": "passed",
+      "mount": { "orientation": { "confirmed": true }, "declaredSides": ["top"], "assetTypeKey": "chair-base" }
+    },
+    {
+      "asset_id": "asset-seat-cover-01",
+      "asset_version": "v1",
+      "role": "primary",
+      "url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/assets/asset-seat-cover-01/versions/v1/model.glb",
+      "fallback_image_url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/previews/asset-seat-cover-01/versions/v1/preview.webp",
+      "validation_status": "passed",
+      "mount": { "orientation": { "confirmed": true }, "declaredSides": ["top"], "assetTypeKey": "chair-seat-cover" }
+    },
+    {
+      "asset_id": "asset-headrest-01",
+      "asset_version": "v1",
+      "role": "primary",
+      "url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/assets/asset-headrest-01/versions/v1/model.glb",
+      "fallback_image_url": "${CLOUDFRONT_DOMAIN}/workspaces/ws-spike03-a/previews/asset-headrest-01/versions/v1/preview.webp",
+      "validation_status": "passed",
+      "mount": { "orientation": { "confirmed": true }, "declaredSides": ["bottom"], "assetTypeKey": "chair-accessory" }
+    }
+  ]
+}

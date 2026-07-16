@@ -1,0 +1,13 @@
+# SPIKE-03 throwaway repo — keep evidence/handoff/creds/binaries out of git
+report/
+handoff/
+.env*
+!.env.local.example
+node_modules/
+dist/
+.vite/
+*.glb
+*.webp
+*.png
+*.log
+# fixtures/*.json ARE tracked (the consistency contract); GLBs above are not.

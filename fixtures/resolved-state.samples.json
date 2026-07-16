@@ -1,0 +1,83 @@
+{
+  "_note": "SPIKE-03 resolved-state fixtures. Each entry is EXACTLY the object SPIKE-05's evaluator (src/evaluator/rule-runtime.cjs -> evaluatePublishedPayload) returns for a given selection. The simulated option panel EMITS one of these; the renderer APPLIES it. Fields copied verbatim from the evaluator contract: status, selected/required/disabled_option_value_ids, violations, visual_state[{visual_node_id, material_id}] (apply-material), visibility_state[{visual_node_id, visible}] (show/hide), asset_state[{visual_node_id, asset_id}] (switch-asset), assembly_plan[relationship_id] (attach-accessory), cart_plan (NOT SPIKE-03's concern — ignore in the renderer). The 'baseline' entry mirrors SPIKE-05 RESULTS.md 'Key Runtime Evidence' verbatim. Do NOT import SPIKE-05 code — this fixture stands in for its output (isolated-spike rule).",
+
+  "samples": [
+    {
+      "label": "baseline (mesh seat + nylon base) — verbatim from SPIKE-05 RESULTS.md",
+      "selection": ["val-arm-4d", "val-back-mesh", "val-base-nylon", "val-color-amber", "val-seat-mesh"],
+      "resolved": {
+        "status": "ok",
+        "selected_option_value_ids": ["val-arm-4d", "val-back-mesh", "val-base-nylon", "val-color-amber", "val-seat-mesh"],
+        "required_option_value_ids": [],
+        "disabled_option_value_ids": [],
+        "violations": [],
+        "visual_state": [
+          { "visual_node_id": "node-base", "material_id": "mat-nylon" },
+          { "visual_node_id": "node-seat-cover", "material_id": "mat-slate" },
+          { "visual_node_id": "node-shell", "material_id": "mat-amber" }
+        ],
+        "visibility_state": [
+          { "visual_node_id": "node-base", "visible": true },
+          { "visual_node_id": "node-seat-cover", "visible": false },
+          { "visual_node_id": "node-shell", "visible": true }
+        ],
+        "asset_state": [
+          { "visual_node_id": "node-base", "asset_id": "asset-base-nylon-finish" }
+        ],
+        "assembly_plan": []
+      }
+    },
+    {
+      "label": "alloy base + slate shell + seat-cover shown (drives apply-material + switch-asset + show/hide)",
+      "selection": ["val-arm-4d", "val-back-solid", "val-base-alloy", "val-color-slate", "val-seat-fabric"],
+      "resolved": {
+        "status": "ok",
+        "selected_option_value_ids": ["val-arm-4d", "val-back-solid", "val-base-alloy", "val-color-slate", "val-seat-fabric"],
+        "required_option_value_ids": [],
+        "disabled_option_value_ids": [],
+        "violations": [],
+        "visual_state": [
+          { "visual_node_id": "node-base", "material_id": "mat-slate" },
+          { "visual_node_id": "node-seat-cover", "material_id": "mat-slate" },
+          { "visual_node_id": "node-shell", "material_id": "mat-slate" }
+        ],
+        "visibility_state": [
+          { "visual_node_id": "node-base", "visible": true },
+          { "visual_node_id": "node-seat-cover", "visible": true },
+          { "visual_node_id": "node-shell", "visible": true }
+        ],
+        "asset_state": [
+          { "visual_node_id": "node-base", "asset_id": "asset-base-alloy-finish" }
+        ],
+        "assembly_plan": []
+      }
+    },
+    {
+      "label": "headrest accessory added (drives assembly_plan -> A3 placement)",
+      "selection": ["val-arm-4d", "val-back-mesh", "val-base-nylon", "val-color-amber", "val-seat-mesh", "val-headrest-on"],
+      "resolved": {
+        "status": "ok",
+        "selected_option_value_ids": ["val-arm-4d", "val-back-mesh", "val-base-nylon", "val-color-amber", "val-headrest-on", "val-seat-mesh"],
+        "required_option_value_ids": [],
+        "disabled_option_value_ids": [],
+        "violations": [],
+        "visual_state": [
+          { "visual_node_id": "node-base", "material_id": "mat-nylon" },
+          { "visual_node_id": "node-headrest", "material_id": "mat-slate" },
+          { "visual_node_id": "node-seat-cover", "material_id": "mat-slate" },
+          { "visual_node_id": "node-shell", "material_id": "mat-amber" }
+        ],
+        "visibility_state": [
+          { "visual_node_id": "node-base", "visible": true },
+          { "visual_node_id": "node-headrest", "visible": true },
+          { "visual_node_id": "node-seat-cover", "visible": false },
+          { "visual_node_id": "node-shell", "visible": true }
+        ],
+        "asset_state": [
+          { "visual_node_id": "node-base", "asset_id": "asset-base-nylon-finish" }
+        ],
+        "assembly_plan": ["asm-headrest-on-shell"]
+      }
+    }
+  ]
+}
