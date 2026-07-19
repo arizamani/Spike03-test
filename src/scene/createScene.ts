@@ -21,15 +21,18 @@ export function createScene(canvas: HTMLCanvasElement): SceneHandle {
     0.01,
     100,
   );
-  camera.position.set(1.6, 1.4, 1.6);
+  camera.position.set(2.0, 1.7, 2.6);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  // preserveDrawingBuffer: true so evidence capture (canvas.toDataURL, report/
+  // screenshots) can reliably read back the framebuffer — a real product
+  // build would drop this for the perf win (SPIKE-03 §8 gotcha).
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 0.5, 0);
+  controls.target.set(0, 0.4, -0.6);
   controls.enableDamping = true;
   controls.update();
 
