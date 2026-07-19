@@ -9,6 +9,7 @@ import { runResolvePlacementSelfTest } from "./assembly/resolvePlacementSelfTest
 import { isWebGLAvailable } from "./fallback/detectWebgl";
 import { renderFallback } from "./fallback/renderFallback";
 import { emitOnce } from "./fallback/analyticsStub";
+import { runPerfCapture } from "./perf/perfCapture";
 
 const canvas = document.getElementById("scene-canvas") as HTMLCanvasElement;
 const panelContainer = document.getElementById("panel") as HTMLElement;
@@ -49,11 +50,14 @@ function runMainExperience(): void {
   );
 
   let panel: ReturnType<typeof mountPanelStub>;
+  const navStart = performance.now();
+  let coldTtiMs = 0;
 
   async function runA1(): Promise<void> {
     panel.setStatus("A1: loading default assembly + gallery…");
     const assemblyLog = await mountDefaultAssembly(sceneHandle.assemblyRoot);
     const galleryLog = await mountLoaderGallery(sceneHandle.assemblyRoot);
+    coldTtiMs = performance.now() - navStart;
 
     // Missing-asset smoke test (handoff P1 TESTING: "one missing url ->
     // visible error, not a crash"). asset_id isn't in the manifest fixture,
@@ -117,4 +121,23 @@ function runMainExperience(): void {
     const ext = sceneHandle.renderer.getContext().getExtension("WEBGL_lose_context");
     ext?.loseContext();
   };
+
+  // A4: measure-only, does not change engine/scene logic. Triggered from
+  // devtools (not a panel button — this is a perf-capture script, not a
+  // user feature). Waits for A1 to finish so coldTtiMs is populated.
+  (window as unknown as { __spike03RunPerfCapture: (durationMs?: number) => Promise<unknown> }).__spike03RunPerfCapture =
+    async (durationMs = 5000) => {
+      const cyclingSamples = resolvedStateFixture.samples.slice(0, 2);
+      const report = await runPerfCapture(
+        sceneHandle.renderer,
+        sceneHandle.scene,
+        sceneHandle.camera,
+        cyclingSamples,
+        coldTtiMs,
+        durationMs,
+      );
+      (window as unknown as { __spike03PerfReport: unknown }).__spike03PerfReport = report;
+      console.log("[A4] perf report:", report);
+      return report;
+    };
 }
