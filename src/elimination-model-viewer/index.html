@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SPIKE-03 · B elimination — &lt;model-viewer&gt;</title>
+    <!--
+      Isolated elimination page — deliberately NOT part of the Three.js
+      harness module graph (ALLOWED FILES: src/elimination-model-viewer/**
+      only; DO NOT TOUCH the Three.js harness). Loaded via CDN script tag
+      rather than the npm package: @google/model-viewer 4.x requires
+      three@^0.183 as a peer, which would force-bump the pinned
+      three@^0.169 used by the rest of this spike for a "confirm quickly,
+      then stop" elimination — not worth the version churn.
+    -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
+    <style>
+      html, body { margin: 0; height: 100%; background: #1a1a1a; font-family: system-ui, sans-serif; color: #eee; }
+      model-viewer { width: 100vw; height: 70vh; background: #1a1a1a; }
+      #panel { padding: 12px; font-size: 13px; }
+      button { margin: 4px 8px 4px 0; padding: 6px 10px; }
+      #log { white-space: pre-wrap; font-family: monospace; font-size: 12px; color: #9f9; margin-top: 8px; }
+    </style>
+  </head>
+  <body>
+    <model-viewer
+      id="mv"
+      src="/assets/workspaces/ws-spike03-a/assets/asset-shell-01/versions/v1/model.glb"
+      camera-controls
+      shadow-intensity="1"
+      alt="SPIKE-03 elimination — chair shell"
+    ></model-viewer>
+    <div id="panel">
+      <h3>B — &lt;model-viewer&gt; elimination (P6)</h3>
+      <button id="btn-material">Attempt material change (whole-model material slot)</button>
+      <button id="btn-asset">Attempt asset swap (src = base-nylon GLB)</button>
+      <div id="log"></div>
+    </div>
+    <script type="module">
+      const mv = document.getElementById("mv");
+      const log = document.getElementById("log");
+      function print(line) {
+        log.textContent += `${new Date().toISOString().slice(11, 23)}  ${line}\n`;
+        console.log("[B elimination]", line);
+      }
+
+      let loadCount = 0;
+      mv.addEventListener("load", () => {
+        loadCount++;
+        print(`model-viewer 'load' event fired (count=${loadCount}) — model ready.`);
+      });
+      mv.addEventListener("error", (e) => print(`model-viewer 'error' event: ${JSON.stringify(e.detail)}`));
+
+      document.getElementById("btn-material").addEventListener("click", () => {
+        const materials = mv.model?.materials ?? [];
+        print(`model.materials found: ${materials.length} (whole-model slots, not per visual_node_id)`);
+        if (materials.length === 0) {
+          print("No material slots exposed yet (model not loaded, or GLB has none) — cannot mutate.");
+          return;
+        }
+        try {
+          materials[0].pbrMetallicRoughness.setBaseColorFactor([0.8, 0.1, 0.1, 1]);
+          print(`Set materials[0] base color to red via pbrMetallicRoughness.setBaseColorFactor(). ` +
+            `This targets a whole GLTF material slot across the WHOLE loaded model — there is no ` +
+            `per-visual_node_id targeting API like our resolved-state visual_state[] shape needs.`);
+        } catch (err) {
+          print(`Material mutation threw: ${err}`);
+        }
+      });
+
+      document.getElementById("btn-asset").addEventListener("click", () => {
+        const before = loadCount;
+        const t0 = performance.now();
+        print(`Setting src to a different asset (base-nylon-finish GLB)...`);
+        mv.src = "/assets/workspaces/ws-spike03-a/assets/asset-base-nylon-finish/versions/v1/model.glb";
+        const check = setInterval(() => {
+          if (loadCount > before) {
+            clearInterval(check);
+            print(`New 'load' event fired after ${(performance.now() - t0).toFixed(1)}ms — ` +
+              `switch-asset via <model-viewer> is a FULL re-parse/reload of the whole viewer, ` +
+              `not an in-place per-node swap like the Three.js harness's applyResolvedState().`);
+          }
+        }, 16);
+      });
+    </script>
+  </body>
+</html>
