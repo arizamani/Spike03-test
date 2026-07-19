@@ -1,0 +1,11 @@
+// Detect WebGL availability without creating the real renderer/canvas —
+// handoff §4: must fail into a friendly fallback, never a blank page.
+export function isWebGLAvailable(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl2") || canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    return !!gl;
+  } catch {
+    return false;
+  }
+}
