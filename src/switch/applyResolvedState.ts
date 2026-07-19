@@ -5,6 +5,7 @@ import { getMaterial, isCachedMaterial } from "./materialCache";
 import { disposeMaterial, disposeObject3D } from "./dispose";
 import { loadManifestAsset } from "../loader/loadAsset";
 import { createErrorPlaceholder } from "../loader/errorPlaceholder";
+import { applyAssemblyPlan } from "../assembly/attachAccessory";
 
 // visual_node_id is looked up via getNode (never ensureNode) — an unknown
 // or not-yet-mounted node_id is a no-op + warning, never a fabricated node
@@ -64,11 +65,16 @@ async function applyAssetSwitch(visualNodeId: string, assetId: string): Promise<
   }
 }
 
-// Order matters: asset switches first (mounts new geometry), then material
-// (paints whatever geometry is now current), then visibility.
+// Order matters: asset switches first (mounts new geometry on existing
+// nodes), then assembly_plan (attaches/mounts any accessory nodes, e.g.
+// node-headrest, that visual_state/visibility_state below may target),
+// then material (paints whatever geometry is now current), then visibility.
 export async function applyResolvedState(resolved: ResolvedState): Promise<void> {
   for (const entry of resolved.asset_state) {
     await applyAssetSwitch(entry.visual_node_id, entry.asset_id);
+  }
+  if (resolved.assembly_plan.length > 0) {
+    await applyAssemblyPlan(resolved.assembly_plan);
   }
   for (const entry of resolved.visual_state) {
     applyMaterial(entry.visual_node_id, entry.material_id);

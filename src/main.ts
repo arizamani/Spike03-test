@@ -5,6 +5,7 @@ import { loadManifestAsset } from "./loader/loadAsset";
 import { applyResolvedState } from "./switch/applyResolvedState";
 import { runSwapLoop } from "./switch/swapLoopHarness";
 import { resolvedStateFixture } from "./manifest/payload";
+import { runResolvePlacementSelfTest } from "./assembly/resolvePlacementSelfTest";
 
 const canvas = document.getElementById("scene-canvas") as HTMLCanvasElement;
 const panelContainer = document.getElementById("panel") as HTMLElement;
@@ -74,3 +75,4 @@ panel = mountPanelStub(
 );
 
 runA1();
+runResolvePlacementSelfTest();
